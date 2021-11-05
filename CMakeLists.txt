@@ -1,38 +1,38 @@
 cmake_minimum_required(VERSION 3.6)
 
 
-##### �v���W�F�N�g�ŗL�̐ݒ� #####
-# �v���W�F�N�g���̐ݒ�
+##### プロジェクト固有の設定 #####
+# プロジェクト名の設定
 set(PROJECT_NAME "CMakeSample")
 
-# ����̐ݒ� (CXX/C)
+# 言語の設定 (CXX/C)
 set(LANG "C")
 
-# �ǉ��p�b�P�[�W�̐ݒ�
+# 追加パッケージの設定
 set(USE_OPENCL FALSE)
 set(USE_CUDA FALSE)
 set(USE_OPENCV FALSE)
 
-# �f�o�b�O�̐ݒ�
+# デバッグの設定
 set(DBG_ARGS "\"Hello CMake!\"")
 set(DBG_DEBUGGER "WindowsLocalDebugger")
 set(DBG_ENV "")
 
-# �\�[�X�̐ݒ�
+# ソースの設定
 add_executable(${PROJECT_NAME}
   ./${PROJECT_NAME}/Source.c
   ./${PROJECT_NAME}/Header.h
 )
 
 
-##### �v���W�F�N�g���ʐݒ� #####
-# �\�����[�V�����t�@�C�����̎w��
+##### プロジェクト共通設定 #####
+# ソリューションファイル名の指定
 project(${PROJECT_NAME})
 
-# �X�^�[�g�A�b�v�v���W�F�N�g�̐ݒ�i3.6�ȍ~�j
+# スタートアッププロジェクトの設定（3.6以降）
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
 
-# �f�o�b�O�ݒ�t�@�C���̐���
+# デバッグ設定ファイルの生成
 if (MSVC)
 set(FILE_DATA [=[
 <?xml version="1.0" encoding="utf-8"?>
@@ -56,10 +56,10 @@ string(REGEX REPLACE "REPLACE_DBG_ENV" "${DBG_ENV}" FILE_DATA "${FILE_DATA}")
 file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.vcxproj.user" "${FILE_DATA}")
 endif (MSVC)
 
-# ����̎w��
+# 言語の指定
 enable_language(${LANG})
 
-# �R���p�C���o�[�W�����̐ݒ�
+# コンパイラバージョンの設定
 if (${LANG} STREQUAL "C")
   set(CMAKE_C_STANDARD 11)    # for C
 elseif (${LANG} STREQUAL "CXX")
@@ -67,7 +67,7 @@ elseif (${LANG} STREQUAL "CXX")
 else ()
 endif ()
 
-# �R���p�C���I�v�V�����̎w��
+# コンパイルオプションの指定
 if (${LANG} STREQUAL "C")       # for C
   if (MSVC)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /TC /W4")
@@ -87,7 +87,7 @@ elseif (${LANG} STREQUAL "CXX") # for C++
 else ()
 endif ()
 
-# �p�b�P�[�W�̌���
+# パッケージの検索
 if ((DEFINED USE_OPENCL) AND (${USE_OPENCL}))
   find_package(OpenCL REQUIRED)
 endif ()
@@ -98,36 +98,36 @@ if ((DEFINED USE_OPENCV) AND (${USE_OPENCV}))
   find_package(OpenCV REQUIRED)
 endif ()
 
-# �p�b�P�[�W�̒ǉ�
+# パッケージの追加
 if ((DEFINED USE_OPENCL) AND (OpenCL_FOUND))  # OpenCL
-  # ���b�Z�[�W�̏o��
+  # メッセージの出力
   message("OpenCL headers and libraries added.")
-  # �C���N���[�h�p�X�̒ǉ�
+  # インクルードパスの追加
   include_directories(${OpenCL_INCLUDE_DIRS})
-  # �����N�^�[�Q�b�g�̒ǉ�
+  # リンクターゲットの追加
   target_link_libraries(${PROJECT_NAME} ${OpenCL_LIBRARIES})
 endif ()
 if ((DEFINED USE_CUDA) AND (CUDA_FOUND))      # CUDA
-  # ���b�Z�[�W�̏o��
+  # メッセージの出力
   message("CUDA headers and libraries added.")
-  # �C���N���[�h�p�X�̒ǉ�
+  # インクルードパスの追加
   include_directories(${CUDA_INCLUDE_DIRS})
-  # �����N�^�[�Q�b�g�̒ǉ�
+  # リンクターゲットの追加
   target_link_libraries(${PROJECT_NAME} ${CUDA_LIBRARIES})
 endif ()
 if ((DEFINED USE_OPENCV) AND (OpenCV_FOUND))  # OpenCV
-  # ���b�Z�[�W�̏o��
+  # メッセージの出力
   message("OpenCV headers and libraries added.")
-  # �C���N���[�h�p�X�̒ǉ�
+  # インクルードパスの追加
   include_directories(${OpenCV_INCLUDE_DIRS})
-  # �����N�^�[�Q�b�g�̒ǉ�
+  # リンクターゲットの追加
   target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
 endif ()
 
-# ���̑��C���N���[�h�p�X�̒ǉ�
+# その他インクルードパスの追加
 include_directories(
 )
 
-# ���̑������N�^�[�Q�b�g�̒ǉ�
+# その他リンクターゲットの追加
 target_link_libraries(${PROJECT_NAME}
 )
