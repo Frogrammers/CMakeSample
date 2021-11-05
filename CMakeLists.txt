@@ -20,8 +20,7 @@ set(DBG_ENV "")
 
 # ソースの設定
 add_executable(${PROJECT_NAME}
-  ./${PROJECT_NAME}/Source.c
-  ./${PROJECT_NAME}/Header.h
+  ./src/Source.c
 )
 
 
@@ -126,6 +125,7 @@ endif ()
 
 # その他インクルードパスの追加
 include_directories(
+  ./include
 )
 
 # その他リンクターゲットの追加
